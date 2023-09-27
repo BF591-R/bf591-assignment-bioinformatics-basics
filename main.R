@@ -127,7 +127,8 @@ reduce_data <- function(expr_tibble, names_ids, good_genes, bad_genes){
 #'
 #' @details This function's primary objective is to reformat the tibble from a 
 #' wide format, where there are separate columns for sample name and expression value, 
-#' to a long format, where each column represents a sample.
+#' to a long format, where sample names are stored in a column named 'sample' 
+#' and their values stored in another column named 'value'.
 #'
 #' @examples 
 #' # Assuming 'wide_data' is your wide-format tibble
