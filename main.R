@@ -27,11 +27,6 @@ library(tidyverse)
 #'
 #' @return A tibble containing the data loaded from the CSV in `filepath`. 
 #' 
-#' @details Note that not all CSVs are created equal, and there are often cases where 
-#' the data will not load in correctly on the first try. You may want to write this functon to 
-#' adjust the CSV file being loaded into this assignment so that it can be formed into a 
-#' tibble correctly.
-#'
 #' @examples 
 #' `data <- load_expression('data/example_intensity_data_subset.csv')`
 load_expression <- function(filepath) {
@@ -71,14 +66,6 @@ filter_15 <- function(tibble){
 #' `getBM()` function may not accept a tibble, so you might need to convert your 
 #' input into a flat vector.
 #'
-#' @examples 
-#' `> affy_to_hgnc(tibble(c('202860_at', '1553551_s_at')))`
-#' `affy_hg_u133_plus_2 hgnc_symbol`
-#' `1        1553551_s_at      MT-ND1`
-#' `2        1553551_s_at       MT-TI`
-#' `3        1553551_s_at       MT-TM`
-#' `4        1553551_s_at      MT-ND2`
-#' `5           202860_at     DENND4B`
 affy_to_hgnc <- function(affy_vector) {
   return(NULL)
 }
@@ -105,15 +92,6 @@ affy_to_hgnc <- function(affy_vector) {
 #' one that associates the probeids with the HGNC gene name, and one that says if 
 #' that gene is in the good or bad sets of genes.
 #'
-#' @examples 
-#' `plot_tibble <- reduce_data(expr_tibble = expr, names_ids = sample_names,`
-#' `                           goodGenes, badGenes)`
-#' `> head(plot_tibble)`
-#' `A tibble: 6 × 38`
-#' `  probe       hgnc    gene_set    GSM972389 ...`
-#' `  <chr>       <chr>   <chr>       <dbl>     ...`
-#' `1 202860_at   DENND4B good        7.16      ...`
-#' `2 204340_at   TMEM187 good        6.40      ...`
 reduce_data <- function(expr_tibble, names_ids, good_genes, bad_genes){
   return(NULL)
 }
@@ -130,10 +108,6 @@ reduce_data <- function(expr_tibble, names_ids, good_genes, bad_genes){
 #' to a long format, where sample names are stored in a column named 'sample' 
 #' and their values stored in another column named 'value'.
 #'
-#' @examples 
-#' # Assuming 'wide_data' is your wide-format tibble
-#' long_data <- convert_to_long(wide_data)
-#' head(long_data)
 convert_to_long <- function(tibble) {
   # Convert long format to wide format
   return(NULL)
