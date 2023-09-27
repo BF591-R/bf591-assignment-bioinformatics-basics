@@ -109,7 +109,7 @@ reduce_data <- function(expr_tibble, names_ids, good_genes, bad_genes){
 #' and their values stored in another column named 'value'.
 #'
 convert_to_long <- function(tibble) {
-  # Convert long format to wide format
+  # Convert wide format to long format
   return(NULL)
 }
 
