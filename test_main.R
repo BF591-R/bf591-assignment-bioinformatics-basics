@@ -1,6 +1,6 @@
 #!/usr/bin/Rscript
 # if you change the name of your script, this line must be changed as well
-source("~/Desktop/main.R")
+source("main.R")
 library(testthat)
 
 test_that("loading csv works using load_expression()", {
