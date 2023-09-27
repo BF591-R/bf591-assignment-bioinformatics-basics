@@ -130,42 +130,53 @@ result_tib # Display the initial rows of the data
 ```
 ## Filtering Rows with `filter_15()`
 
-To effectively work with our vast dataset, it's essential to filter out rows that don't meet certain criteria. The `filter_15()` function does precisely this by retaining rows where at least 15% of the values surpass a log2(15) expression level—equivalent to approximately 3.9. Notably, the function returns only the probe IDs, providing a summarized view of the dataset that meets the criteria.
+To effectively work with our slightly vast dataset, it's essential to filter out
+rows that don't meet certain criteria. The `filter_15()` function does precisely
+this by retaining rows where at least 15% of the values surpass a log2(15)
+expression level—equivalent to approximately 3.9. Notably, the function returns
+only the probe IDs, providing a summarized view of the dataset that meets the
+criteria.
 
-While one might initially consider using traditional loops for row-wise operations, such methods can be inefficient for large datasets. Leveraging functions from the Tidyverse, particularly from the `dplyr` package, offers a more efficient and readable approach. Functions like `filter()` and `mutate()` allow for swift data transformations, enhancing both clarity and performance.
+While one might initially consider using traditional loops for row-wise
+operations, such methods can be inefficient for large datasets. Leveraging
+functions from the Tidyverse, particularly from the `dplyr` package, offers a
+more efficient and readable approach. Functions like `filter()` and `mutate()`
+allow for swift data transformations, enhancing both clarity and performance.
 
 
 ```{r filter_15}
-test_tib <- tibble(probe=c('1_s_at', '2_s_at', '3_s_at', '4_s_at'),
-                   GSM1=c(1.0, 3.95, 4.05, 0.5),
-                   GSM2=rep(1.6, 4),
-                   GSM3=rep(2.5, 4),
-                   GSM4=rep(3.99, 4),
-                   GSM5=rep(3.0, 4),
-                   GSM6=rep(1.0, 4),
-                   GSM7=rep(0.5, 4))
-filtered_probes <- c(filter_15(test_tib)$probe)
-filtered_probes # Display the probe IDs that meet the criteria
+filtered_probes <- c(filter_15(result_tib)$probe)
+print(paste0("Original number of probes in unfiltered data: ", nrow(result_tib)))
+print(paste0("Probes remaining in filtered dataset: ", length(filtered_probes))) 
+
+#tibble of probes that survive the filter
+filter_15(result_tib)
 ```
 
 ## Converting Affy IDs to HGNC Names: `affy_to_hgnc()`
 
-Gene data often involves various identifiers, and converting between these can be crucial for data integration. The function `affy_to_hgnc()` serves this purpose by linking Affymetrix probe IDs to HGNC gene IDs using the `biomaRt` package. However, while `biomaRt` offers a direct connection to Ensembl, a comprehensive genomic database, its reliance on external APIs can lead to occasional connectivity issues. If errors arise during usage, they're often due to these external connections rather than the code itself.
+Gene data often involves various identifiers, and converting between these can
+be crucial for data integration. The function `affy_to_hgnc()` serves this
+purpose by linking Affymetrix probe IDs to HGNC gene IDs using the `biomaRt`
+package. However, while `biomaRt` offers a direct connection to Ensembl, a
+comprehensive genomic database, its reliance on external APIs can lead to
+occasional connectivity issues. If errors arise during usage, they're often due
+to these external connections rather than the code itself.
 
-When implementing, remember:
-- Use the `ENSEMBL_MART_ENSEMBL` biomart and the `hsapiens_gene_ensembl` dataset.
-- Fetch the attributes `"affy_hg_u133_plus_2"` and `"hgnc_symbol"`.
-- Despite the function aiming to return a tibble, `biomaRt`'s `getBM()` only deals with data.frames. Utilize `dplyr::pull()` to transform a tibble to a character vector, and `dplyr::as_tibble()` for converting a data frame back to a tibble.
+When implementing, remember: 
+
+- Use the `ENSEMBL_MART_ENSEMBL` biomart and the `hsapiens_gene_ensembl` dataset. 
+
+- Fetch the attributes `"affy_hg_u133_plus_2"` and `"hgnc_symbol"`. 
+
+- Despite the function aiming to return a tibble, `biomaRt`'s `getBM()` only
+deals with data.frames. Utilize `dplyr::pull()` to transform a tibble to a
+character vector, and `dplyr::as_tibble()` for converting a data frame back to a
+tibble.
 ```{r affy_to_hgnc}
 # Converting a sample affy ID to HGNC
-response <- affy_to_hgnc(tibble('1553551_s_at'))
-
-# Checking for potential connectivity issues with Ensembl
-if (inherits(response, "try-error")) {
-    print("Could not connect to ENSEMBL.")
-} else {
-    head(response) # Display the first few mappings
-}
+filter_15(result_tib) %>% affy_to_hgnc() -> gene_names
+gene_names
 ```
 ## Refining Data with reduce_data()
 Our data preparation's ultimate goal is to streamline the dataset, focusing on relevant genes to make visualization more efficient with ggplot from the tidyverse package. The reduce_data() function serves this purpose by integrating various inputs, such as:
@@ -175,60 +186,65 @@ Probe IDs linked to HGNC symbols.
 Lists of 'good' and 'bad' gene names.
 The function operates as follows:
 
-Matches probe IDs with HGNC symbols using the base function match().
-Introduces the new data at the appropriate position using tibble::add_column().
-Segregates the genes into two categories, 'good' and 'bad', leveraging the which() function and the %in% operator.
+- Matches probe IDs with HGNC symbols using the base function match().
+
+- Introduces the new data at the appropriate position using tibble::add_column().
+
+- Segregates the genes into two categories, 'good' and 'bad', leveraging the which() function and the %in% operator.
+
 In the end, the output is a tibble streamlined to only the genes of interest, with a dedicated column indicating the gene's category.
 
 ```{r reduce_data}
 # Sample data and gene lists
-expression_data <- tibble(probe = c("1_s_at", "2_s_at", "3_s_at", "4_s_at"),
-                          GSM1 = c(9.5, 7.6, 5.5, 1.3),
-                          GSM2 = c(9.7, 7.2, 2.9, 2.0),
-                          GSM3 = c(6.9, 4.3, 6.8, 4.5))
-gene_names <- tibble(affy_hg_u133_plus_2 = c("1_s_at", "2_s_at", "3_s_at", "4_s_at"),
-                     hgnc_symbol = c("A-REAL-GENE", "SONIC", "UTWPU", "p53"))
-good_genes <- c("A-REAL-GENE")
-bad_genes <- c("SONIC")
+goodGenes <- c("SLC1A4", "MGAT5B", "LINC02907", "BRIP1", "NRIP1", "TGDS", "PSMD10")
+badGenes <- c("MAF", "PLD4", "LIG3", "RARA", "NOTCH4", "USP8", "RARG")
 
-expression_data
 # Applying the function
-reduced_data <- reduce_data(expression_data, gene_names, good_genes, bad_genes)
+reduced_data <- reduce_data(result_tib, gene_names, goodGenes, badGenes)
 reduced_data
 
 ```
 
-## Analysis of Gene Expressions
+## Analysis of Gene Expression Data
 
-In our analysis, we aim to visualize the gene expressions categorized as 'good' and 'bad'. Before visualizing, it's crucial to ensure our data is structured correctly. For our visualization, we need the data in a long format, so we'll start by converting our data to this format.
+In our analysis, we aim to visualize the gene expression data for genes
+categorized as 'good' and 'bad'. We are using good and bad arbitrarily to
+represent two potentially interesting groups of genes. Before visualizing, it's
+crucial to ensure our data is structured correctly. We would like to plot this
+data as a boxplot and so we will reformat the data to "long" format to enable
+seamless plotting in ggplot2. 
 
 ### Convert Data Format
-First, we'll generate a sample tibble that is in wide format, your function should properly convert it to long format with the old sample columns (GSM1, GSM2, etc.) in a new column called "sample", and leave the values column named as its default "values". Pretend that we have used
-our above filter and cherry picked genes to generate a candidate list of good and bad genes which include genes A-F. 
+First, we'll look at our reduced data from the previous function. This new
+function, `convert_to_long` should properly convert this output to "long" format
+with the old sample columns (GSM972389, etc.) in a new column called "sample",
+and the values column named 'values' (the default).
 
-```{r}
-# Test on an artificial tibble matching the structure of the real one
-test_wide <- tibble(probe = c("probe1", "probe2", "probe3", "probe4", "probe5", "probe6"),
-                    hgnc_symbol = c("geneA", "geneB", "geneC", "geneD", "geneE", "geneF"),
-                    gene_set = c("good", "bad", "bad", "good", "good", "bad"),
-                    GSM1 = c(2.5, 3.3, 3.5, 1.8, 2.5, 3.3),
-                    GSM2 = c(2.7, 3.7, 3.9, 2.2, 2.1, 3.9))
+```{r convert standard tibble format to long format for plotting}
+# original data in "wide" format
+reduced_data
 
-test_wide
-
-long_format_data <- convert_to_long(test_wide)
+# data in long format for easy plotting in ggplot2
+long_format_data <- convert_to_long(reduced_data)
 long_format_data
 ```
-##Plotting the Boxplot
-Now, with our data in long format, we can visualize the distribution of gene expressions for the 'good' and 'bad' gene sets. We'll use ggplot2 to create a boxplot:
-```{r}
+
+## Plotting the expression values as a boxplot using ggplot2
+Now, with our data in long format, we can visualize the distribution of gene
+expression values for the 'good' and 'bad' gene sets. We'll use ggplot2 to
+create a quick boxplot:
+```{r boxplot from long format data using ggplot2}
 library(ggplot2)
+
+long_format_data$hgnc_symbol <- factor(long_format_data$hgnc_symbol,
+                            levels = unique(long_format_data$hgnc_symbol), 
+                            ordered = TRUE)
 
 ggplot(long_format_data, aes(x = hgnc_symbol, y = value)) + 
   geom_boxplot(aes(fill = gene_set)) +
-  labs(title = "Distribution of Gene Expressions", 
+  labs(title = "These genes were picked randomly, don't expect to see a pattern", 
        x = "Gene Set", 
        y = "Expression Value") +
-  theme_minimal()
+  theme_minimal() + theme(axis.text.x=element_text(angle = -90, hjust = 0))
 
 ```
