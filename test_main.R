@@ -59,7 +59,7 @@ test_that("reduce_data() is correctly changing the size and shape of the tibble"
   expect_equal(reduce_test, result)
 })
 
-test_that("convert_to_wide() correctly converts from long to wide format", {
+test_that("convert_to_long() correctly converts from long to wide format", {
   
   # wide format tibble
   wide_tib <- tibble(probe = c("202274_at", "202541_at", "202542_s_at", "203919_at"),
@@ -75,10 +75,10 @@ test_that("convert_to_wide() correctly converts from long to wide format", {
                      sample = rep(c("GSM1", "GSM2"), 4),
                      value = c(8.05, 7.74, 8.40, 7.11, 9.55, 8.48, 4.44, 5.39))
   
-  # Convert to wide format
+  # Convert to long format
   long_format <- convert_to_long(wide_tib)
   
-  # Test if the converted wide format matches the expected tibble
+  # Test if the converted long format matches the expected tibble
   expect_equal(long_format, expected_tib)
 })
 
