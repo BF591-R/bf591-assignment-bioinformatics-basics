@@ -59,7 +59,7 @@ test_that("reduce_data() is correctly changing the size and shape of the tibble"
   expect_equal(reduce_test, result)
 })
 
-test_that("convert_to_long() correctly converts from long to wide format", {
+test_that("convert_to_long() correctly converts from wide to long format", {
   
   # wide format tibble
   wide_tib <- tibble(probe = c("202274_at", "202541_at", "202542_s_at", "203919_at"),
