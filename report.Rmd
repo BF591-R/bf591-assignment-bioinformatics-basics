@@ -1,5 +1,5 @@
 ---
-title: "Assignment 2 Report"
+title: "Assignment Bioinformatics Basics Report"
 author: "Taylor Falk"
 date: "11/17/2021"
 output: html_document
@@ -76,11 +76,6 @@ indicates Python. R Markdown does not support every language, but there are use
 cases where one document running both R and Python code can prove extremely
 useful and concise. There is also a button in RStudio to insert a snippet, it
 is a small green `+C` in the top right of the editor.
-
-```{python}
-import datetime
-print(f'Wishing you a wonderful hello from Python at {datetime.datetime.now()}')
-```
 
 I can also test my code in RStudio without having to knit the entire document
 by pressing the green "Play" arrow on the snippet I am interested in.
@@ -231,20 +226,12 @@ long_format_data
 
 ## Plotting the expression values as a boxplot using ggplot2
 Now, with our data in long format, we can visualize the distribution of gene
-expression values for the 'good' and 'bad' gene sets. We'll use ggplot2 to
-create a quick boxplot:
-```{r boxplot from long format data using ggplot2}
+expression values for the 'good' and 'bad' gene sets. Please use ggplot2 to 
+construct a boxplot akin to the one you see in the reference_report.html. You
+do *not* need to do this in a function, use the space provided below to create
+this plot. 
+```{r boxplot from long format data using ggplot2, echo=FALSE}
 library(ggplot2)
 
-long_format_data$hgnc_symbol <- factor(long_format_data$hgnc_symbol,
-                            levels = unique(long_format_data$hgnc_symbol), 
-                            ordered = TRUE)
-
-ggplot(long_format_data, aes(x = hgnc_symbol, y = value)) + 
-  geom_boxplot(aes(fill = gene_set)) +
-  labs(title = "These genes were picked randomly, don't expect to see a pattern", 
-       x = "Gene Set", 
-       y = "Expression Value") +
-  theme_minimal() + theme(axis.text.x=element_text(angle = -90, hjust = 0))
 
 ```
