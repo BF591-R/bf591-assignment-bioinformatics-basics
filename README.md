@@ -33,7 +33,7 @@ Markdown, which for this assignment is `report.Rmd`. The document itself goes
 into greater detail, but you will:  
 
 1. Complete the functions in `main.R` and use
-`testthat:test_file('test_main.R')` to ensure they work correctly.  
+`testthat::test_file('test_main.R')` to ensure they work correctly.  
 2. Read the R Markdown file and complete the section called **"Assignment"**. To
 do this, you can `source('main.R')` to bring over the functions you wrote in
 step one.  

@@ -471,8 +471,10 @@ your ggplot function from the <code>main.R</code> script with high
 quality visual aesthetics. Do not use default ggplot colors.</p>
 <!-- TODO: Add a figure -->
 <pre class="r"><code># use source to load your functions from main.R into this document.
-source(&quot;main.R&quot;)
-library(tidyverse)</code></pre>
+source(&quot;main.R&quot;)</code></pre>
+<pre><code>## Bioconductor version &#39;3.17&#39; is out-of-date; the current release version &#39;3.19&#39;
+##   is available with R version &#39;4.4&#39;; see https://bioconductor.org/install</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
 <div id="loading-csv-with-load_expression" class="section level2">
 <h2>Loading CSV with <code>load_expression()</code></h2>
 <p>Importing data into R effectively is crucial. For our tasks, we
@@ -574,20 +576,20 @@ back to a tibble.</p></li>
 <pre class="r"><code># Converting a sample affy ID to HGNC
 filter_15(result_tib) %&gt;% affy_to_hgnc() -&gt; gene_names
 gene_names</code></pre>
-<pre><code>## # A tibble: 666 × 2
+<pre><code>## # A tibble: 674 × 2
 ##    affy_hg_u133_plus_2 hgnc_symbol
 ##    &lt;chr&gt;               &lt;chr&gt;      
-##  1 210408_s_at         &quot;CPNE6&quot;    
-##  2 216389_s_at         &quot;DCAF11&quot;   
-##  3 206574_s_at         &quot;PTP4A3&quot;   
+##  1 211074_at           &quot;&quot;         
+##  2 211765_x_at         &quot;PPIAP22&quot;  
+##  3 213164_at           &quot;SLC5A3&quot;   
 ##  4 223106_at           &quot;TMEM14C&quot;  
-##  5 224578_at           &quot;RCC2&quot;     
-##  6 211074_at           &quot;&quot;         
-##  7 202239_at           &quot;PARP4&quot;    
-##  8 211765_x_at         &quot;PPIAP22&quot;  
-##  9 213164_at           &quot;SLC5A3&quot;   
-## 10 229829_at           &quot;LINC00526&quot;
-## # ℹ 656 more rows</code></pre>
+##  5 229829_at           &quot;LINC00526&quot;
+##  6 210408_s_at         &quot;CPNE6&quot;    
+##  7 216389_s_at         &quot;DCAF11&quot;   
+##  8 1554339_a_at        &quot;COG3&quot;     
+##  9 220180_at           &quot;CCDC68&quot;   
+## 10 209081_s_at         &quot;COL18A1&quot;  
+## # ℹ 664 more rows</code></pre>
 </div>
 <div id="refining-data-with-reduce_data" class="section level2">
 <h2>Refining Data with reduce_data()</h2>
