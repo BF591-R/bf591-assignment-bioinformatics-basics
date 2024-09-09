@@ -5,6 +5,9 @@ Arranging the structure of our data inputs is vital to using R, as is creating
 the correct environment for analysis by installing packages. It is also
 important to share data and results easily using R markdown.
 
+## Required Readings
+Please read sections 9.2 through 9.7.4 in the textbook. Section 9.2 starts [here](https://bu-bioinfo.github.io/r-for-biological-sciences/biology-bioinformatics.html#biological-data-overview)
+
 ## Learning Objectives
 - Install various packages needed for analysis
 - Load data, filter that data, and retrieve HGNC ids for the data
@@ -19,6 +22,8 @@ important to share data and results easily using R markdown.
 ## Instructions
 Our main focus for this assignment are installing packages, manipulating data,
 and plotting our manipulated data.
+
+Please accept the GitHub classroom link provided on blackboard for this assignment.
 
 The project is laid out as such:  
 ```
