@@ -3,7 +3,8 @@
 ## Problem Statement
 Arranging the structure of our data inputs is vital to using R, as is creating
 the correct environment for analysis by installing packages. It is also
-important to share data and results easily using R markdown.
+important to share data and results easily using R markdown notebooks. We will
+talk in more detail about microarrays in-class. 
 
 ## Required Readings
 Please read sections 9.2 through 9.7.4 in the textbook. Section 9.2 starts [here](https://bu-bioinfo.github.io/r-for-biological-sciences/biology-bioinformatics.html#biological-data-overview)
